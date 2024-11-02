@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import uploadFile from "../../appwrite/upload";
-import dataService from "../../appwrite/config";
 function MyPostCard({post, deletePost}) {
   
     return (
@@ -26,7 +25,7 @@ function MyPostCard({post, deletePost}) {
               Edit
             </Link>
           </div>
-          <button type="button" class="btn btn-sm btn-danger me-4" onClick={deletePost}>
+          <button type="button" class="btn btn-sm btn-danger me-4" onClick={() => deletePost(post.$id)}>
               Delete
             </button>
           <small class="text-body-secondary ">{post.status.toUpperCase()}</small>
