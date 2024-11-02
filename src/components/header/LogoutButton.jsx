@@ -10,7 +10,7 @@ function LogoutButton() {
         })
     }
   return (
-<button type="button" class="btn btn-info" onClick={handleLogout}>Logout</button>
+<button type="button" className="btn btn-info" onClick={handleLogout}>Logout</button>
   )
 }
 

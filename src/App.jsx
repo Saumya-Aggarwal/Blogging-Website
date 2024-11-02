@@ -4,6 +4,7 @@ import authService from "./appwrite/auth";
 import { login, logout } from "./store/authSlice";
 import { Header, Footer, Loader } from "./components";
 import { Outlet } from "react-router-dom";
+import PostForm from "./components/post-form/postForm";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -30,9 +31,14 @@ function App() {
 
   return (
     <>
-      <Header />
-      {loading ? <Loader /> : <Outlet />}
-      <Footer />
+      <div className="wrapper">
+        <Header />
+        <main>
+          {loading ? <Loader /> : <Outlet />}
+        </main>
+
+        <Footer />
+      </div>
     </>
   );
 }

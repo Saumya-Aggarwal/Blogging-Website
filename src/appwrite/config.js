@@ -64,12 +64,12 @@ export class DataService {
       throw error;
     }
   }
-  async getPostsActive() {
+  async getPosts(query = [Query.equal("status", "active")]) {
     try {
-      return await this.databases.listDocument(
+      return await this.databases.listDocuments(
         conf.appWriteDatabaseId,
         conf.appWriteCollectionId,
-        [Query.equal("status", "active")]
+        query
       );
     } catch (error) {
       throw error;

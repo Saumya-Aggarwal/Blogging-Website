@@ -32,7 +32,8 @@ export class UploadFile {
     }
   }
   filePreview(fileId) {
-    return this.bucket.getFilePreview(conf.appWriteBucketId, fileId);
+    return this.bucket.getFilePreview(conf.appWriteBucketId, fileId, 350, // width (optional)
+      250,);
   }
 }
 
