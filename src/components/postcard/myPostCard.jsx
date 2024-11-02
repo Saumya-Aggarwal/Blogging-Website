@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import uploadFile from "../../appwrite/upload";
-function MyPostCard({post}) {
-  return (
+import dataService from "../../appwrite/config";
+function MyPostCard({post, deletePost}) {
+  
+    return (
     <div class="card shadow-sm" bis_skin_checked="1">
       <img
         src={uploadFile.filePreview(post.featuredImage)}
@@ -24,6 +26,9 @@ function MyPostCard({post}) {
               Edit
             </Link>
           </div>
+          <button type="button" class="btn btn-sm btn-danger me-4" onClick={deletePost}>
+              Delete
+            </button>
           <small class="text-body-secondary ">{post.status.toUpperCase()}</small>
         </div>
       </div>

@@ -27,7 +27,7 @@ const router = createBrowserRouter([
       { path: "/sign-up", element:( <Protected authentication = {false}><SignUpPage /></Protected> )},
       { path: "/all-posts", element:( <Protected authentication = {true}><AllPostPage /></Protected> )},
       { path: "/add-post", element:( <Protected authentication = {true}><AddPostPage /></Protected> )},
-      { path: "/edit-post", element:( <Protected authentication = {true}><EditPostPage /></Protected> )},
+      { path: "/edit-post/:slug", element:( <Protected authentication = {true}><EditPostPage /></Protected> )},
       { path: "/my-posts", element:( <Protected authentication = {true}><MyPostPage /></Protected> )},
       { path: `/post/:slug`, element:( <Protected authentication = {true}><PostPage /></Protected> )},
     ],

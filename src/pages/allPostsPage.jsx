@@ -4,12 +4,13 @@ import { PostCard } from "../components";
 
 function AllPostsPage() {
   const [posts, setPosts] = useState([]);
-
+  const [loading , setLoading] = useState(true);
   useEffect(() => {
     dataService.getPosts().then((data) => {
       if (data) {
         console.log(data)
         setPosts(data.documents);
+        setLoading(false);
       }
     });
   }, []);
@@ -20,7 +21,7 @@ function AllPostsPage() {
         All Posts
         <hr className="my-2" style={{ border: '2px solid #6c757d    ', width: '50%', margin: 'auto' }} />
       </h2>
-      {posts.length === 0 ? (
+      {posts.length === 0 && loading === false ? (
         <center><h2>No Posts To Show</h2></center>
       ) : (
         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">

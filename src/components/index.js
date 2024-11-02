@@ -26,5 +26,6 @@ export {
   SignUp,
   Login,
   MyPostCard,
-  BlogPost
+  BlogPost,
+
 };
