@@ -10,7 +10,7 @@ function MyPostsPage() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const [postIdToDelete, setPostIdToDelete] = useState(null); // State to store post ID to delete
-  const [checkingAuth, setCheckingAuth] = useState(true); // New loading state for auth check
+  const [authChecked, setAuthChecked] = useState(false); // New loading state for auth check
   const userData = useSelector((state) => state.auth.userData);
   const userIdQuery = userData?.$id ? [Query.equal("userId", userData.$id)] : null;
 
@@ -34,18 +34,15 @@ function MyPostsPage() {
     }
   };
 
+  // New auth check effect to ensure userData is fully loaded before proceeding
   useEffect(() => {
-    // Set a short delay to simulate auth check and ensure userData is loaded
-    if (userData) {
-      setCheckingAuth(false); // Stop loading once userData is available
-    } else {
-      const timer = setTimeout(() => setCheckingAuth(false), 500); // Set a brief delay if needed
-      return () => clearTimeout(timer); // Clean up timer on component unmount
+    if (userData !== undefined) {
+      setAuthChecked(true); // Mark auth as checked only once userData is resolved
     }
   }, [userData]);
 
   useEffect(() => {
-    if (userIdQuery) {
+    if (authChecked && userIdQuery) {
       dataService.getPosts(userIdQuery)
         .then((data) => {
           if (data && data.documents) {
@@ -59,16 +56,16 @@ function MyPostsPage() {
           console.error("Error fetching posts:", error);
           setLoading(false);
         });
-    } else {
-      setLoading(false);  // Stop loading if userIdQuery isn't set
+    } else if (authChecked && !userData) {
+      setLoading(false);  // Stop loading if user is not logged in
     }
-  }, [userIdQuery]);
+  }, [authChecked, userIdQuery]);
 
-  if (checkingAuth) {
+  if (!authChecked) {
     return (
       <div className="text-center">
         <Spinner animation="border" variant="primary" />
-        <p>Loading authentication...</p>
+        <p>Checking authentication...</p>
       </div>
     );
   }
