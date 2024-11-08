@@ -3,7 +3,7 @@ import dataService from "../appwrite/config";
 import { MyPostCard } from "../components";
 import { useSelector } from "react-redux";
 import { Query } from "appwrite";
-import { Modal, Button } from "react-bootstrap"; // Import Bootstrap Modal and Button components
+import { Modal, Button, Spinner } from "react-bootstrap"; // Import Bootstrap Modal, Button, and Spinner
 
 function MyPostsPage() {
   const [posts, setPosts] = useState([]);
@@ -35,14 +35,19 @@ function MyPostsPage() {
 
   useEffect(() => {
     if (userData && userData.$id) {
-      dataService.getPosts(userIdQuery).then((data) => {
-        if (data && data.documents) {
-          setPosts(data.documents);
-        } else {
-          console.error("No documents found or invalid response structure", data);
-        }
-        setLoading(false);
-      });
+      dataService.getPosts(userIdQuery)
+        .then((data) => {
+          if (data && data.documents) {
+            setPosts(data.documents);
+          } else {
+            console.error("No documents found or invalid response structure", data);
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching posts:", error);
+          setLoading(false);
+        });
     }
   }, [userData]);
 
@@ -52,21 +57,30 @@ function MyPostsPage() {
         Your Posts
         <hr className="my-2" style={{ border: '2px solid #6c757d', width: '50%', margin: 'auto' }} />
       </h2>
-      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mt-3">
-        {posts.length === 0 && loading === false ? (
-          <div className="col">
-            <h2>No Posts To Show</h2>
-          </div>
-        ) : (
-          posts.map((post) => (
-            <div className="col" key={post.$id}>
-              <div className="card shadow-sm">
-                <MyPostCard post={post} deletePost={() => openDeleteModal(post.$id)} />
-              </div>
+      
+      {/* Display loading spinner or message */}
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" variant="primary" />
+          <p>Loading posts...</p>
+        </div>
+      ) : (
+        <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mt-3">
+          {posts.length === 0 ? (
+            <div className="col">
+              <h2>No Posts To Show</h2>
             </div>
-          ))
-        )}
-      </div>
+          ) : (
+            posts.map((post) => (
+              <div className="col" key={post.$id}>
+                <div className="card shadow-sm">
+                  <MyPostCard post={post} deletePost={() => openDeleteModal(post.$id)} />
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
 
       {/* Delete Confirmation Modal */}
       <Modal show={showModal} onHide={closeDeleteModal}>
