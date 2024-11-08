@@ -4,42 +4,37 @@ import authService from "./appwrite/auth";
 import { login, logout } from "./store/authSlice";
 import { Header, Footer, Loader } from "./components";
 import { Outlet } from "react-router-dom";
-import PostForm from "./components/post-form/postForm";
 
 function App() {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // Check for an active Appwrite session
     authService
       .getCurrentUser()
       .then((userData) => {
         if (userData) {
-          dispatch(login({ userData }));
+          dispatch(login({ userData }));  // User is authenticated
         } else {
-          dispatch(logout());
+          dispatch(logout());  // No active session
         }
       })
       .catch((error) => {
         console.error("Error fetching user:", error);
-        dispatch(logout());
+        dispatch(logout());  // Handle errors with logout
       })
       .finally(() => {
-        setLoading(false);
+        setLoading(false);  // Remove loader after session check
       });
   }, [dispatch]);
 
   return (
-    <>
-      <div className="wrapper">
-        <Header />
-        <main>
-          {loading ? <Loader /> : <Outlet />}
-        </main>
-
-        <Footer />
-      </div>
-    </>
+    <div className="wrapper">
+      <Header />
+      <main>{loading ? <Loader /> : <Outlet />}</main>
+      <Footer />
+    </div>
   );
 }
 
