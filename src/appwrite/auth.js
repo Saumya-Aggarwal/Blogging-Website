@@ -5,7 +5,7 @@ export class AuthService {
   account;
 
   constructor(params) {
-    //it will be called whenver an object od this class is made
+    //it will be called whenever an object od this class is made
     this.client
       .setEndpoint(conf.appWriteUrl)
       .setProject(conf.appWriteProjectId);
